@@ -3,12 +3,14 @@ use warnings;
 
 # 09 条件分岐と比較演算子
 
+print "\n10.1-----------------------\n";
+
 my $score = 85;
 if ($score >= 80) {
   print("ok!");
 }
 
-print "\n-----------------------\n";
+print "\n10.2-----------------------\n";
 
 # 数値: < > <= >= ==(同じ) |=(同じではない)
 # 文字列 eq ne gt lt ge le :
@@ -29,16 +31,36 @@ print "\n\n";
 if (($name eq "Luke") && ($score >= 80)) {
     print("I am your father!!");
 }
-print "\n-----------------------\n";
-
 # 11,さらに条件分岐する
 
-my $score = 25;
+print "\n11.-----------------------\n";
+my $score2 = 25;
 
 if ($score2 >= 80) {
   print("ok!");
-} elseif ($socre2 >= 40){
+} elsif ($score2 >= 40){
   print("note ok...");
 } else {
-  print ("taketeh test again!");
+  print ("take the test again!");
 }
+
+# 12.ifの別の書き方
+print "\n12.-----------------------\n";
+
+my $score3 = 85;
+if ($score3 >= 80) {
+  print("ok!");
+}
+# if文の後置 : 条件を後ろに置くことができる
+print("OK!") if ($score3 >= 80);
+
+# 三項演算子
+# if ... els ... に似たもの、一行で書くことができる
+# 書き方：(条件) ? 値１ : 値２
+#  = 条件が真の場合、値１、偽の場合、値２
+
+my $a = 10;
+my $b = 20;
+
+# $maxに大きい値を格納する
+my $max = $a > $b ? $a : $b;
