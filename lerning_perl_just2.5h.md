@@ -447,6 +447,7 @@ print $hashRef->{"Helium"};     # exactly the same thing - this is very common
 ### データ構造を宣言する
 4つの例があります。ですが、実践的には、最後のものがもっとも有用です。
 
+```
 my %owner1 = (
 	"name" => "Santa Claus",
 	"DOB"  => "1882-12-25",
@@ -470,28 +471,20 @@ my %account = (
 	"opened" => "2000-01-01",
 	"owners" => $ownersRef,
 );
+```
+
+> my $owner1Ref = \%owner1;
+> my $owner2Ref = \%owner2;
+
 これは、明らかに不必要で骨の折れます。なぜなら、次のように省略できます:
 
-my %owner1 = (
-	"name" => "Santa Claus",
-	"DOB"  => "1882-12-25",
-);
+> my @owners = ( \%owner1, \%owner2 );
 
-my %owner2 = (
-	"name" => "Mickey Mouse",
-	"DOB"  => "1928-11-18",
-);
 
-my @owners = ( \%owner1, \%owner2 );
-
-my %account = (
-	"number" => "12345678",
-	"opened" => "2000-01-01",
-	"owners" => \@owners,
-);
 別の記号を使って無名配列やハッシュを宣言することも出来ます。四角いブラケットを無名配列に、ブレースを無名ハッシュに使います。それぞれ、返される値は、無名のデータ構造のリファレンスになります。注意して見てください。次の結果は、上の%accountと全く同じです:
 
-# Braces denote an anonymous hash
+```
+# Braces denote an anonymous hash 無名ハッシュのリファレンスを得る
 my $owner1Ref = {
 	"name" => "Santa Claus",
 	"DOB"  => "1882-12-25",
@@ -503,13 +496,17 @@ my $owner2Ref = {
 };
 
 # Square brackets denote an anonymous array
-my $ownersRef = [ $owner1Ref, $owner2Ref ];
+my $ownersRef = [ $owner1Ref, $owner2Ref ]; #無名配列のリファレンスを得る
 
 my %account = (
 	"number" => "12345678",
 	"opened" => "2000-01-01",
 	"owners" => $ownersRef,
 );
+```
+
+`2つの無名ハッシュのリファレンスを無名配列に入れて、さらにそのリファレンスを得る`
+
 または、省略するすると(そして、行でデータ複雑な構造を宣言する時に、実際に使うべき形です):
 
 my %account = (
