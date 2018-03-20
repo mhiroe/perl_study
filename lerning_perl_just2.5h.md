@@ -1452,7 +1452,7 @@ Food::Potatoes::subroutine(); # "kingedward"
 use strict;
 use warnings;
 
-package Demo::StringUtils;
+package Demo::StringUtils; # packageとして名前空間を切り替えている
 
 sub zombify {
 	my $word = shift @_;
@@ -1463,13 +1463,19 @@ sub zombify {
 return 1;
 ```
 そして、main.plを変更します
-
+```
 use strict;
 use warnings;
 
-require Demo::StringUtils;
+require Demo::StringUtils; # モジュールとして呼び出している
 
-print Demo::StringUtils::zombify("i want brains"); # "r wrnt brrrns"
+sub zombify {
+  my $word = "i am not zonbi";
+  retun $word;
+}
+
+print Demo::StringUtils::zombify("i want brains"); # "r wrnt brrrns" # main:zombify() は壊さない
+```
 では、次はちょっと注意して読んでください。
 
 パッケージとモジュールの2つは、プログラミング言語Perlにおいて完全に分かれており、区別された機能です。この2つが同じダブルコロンのデリミタを使っていることは、大きなひっかけです。これは、スクリプトまたはモジュールのコース経由でパッケージを複数回切り替えることができ、また、複数のファイル内の複数の場所で同一のパッケージ宣言を使うこともできます。require Foo::Barを呼ぶことはFoo::Bar名前空間にあるサブルーチンやパッケージ変数を必ずしもロードしませんし、Foo::Bar名前空間のサブルーチンを必ずしもロードするわけではありません。require Foo::Barを呼ぶことは、単にFoo/Bar.pmというファイルをロードするだけであり、そのファイルに、どのような種類のパッケージ宣言も必要有りません。実際には、package Baz::Quxのようなナンセンスな宣言もできます。
