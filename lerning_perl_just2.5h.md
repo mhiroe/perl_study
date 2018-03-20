@@ -117,6 +117,7 @@ print "yes" == "no"; # "1" with two warnings; both values evaluate to 0 when use
 このレッスンでは、正しい状況で正しい演算子を使うようにしています。数字としてスカラを比較するのと、文字列としてスカラを比較するのとでは、演算子を区別します。:
 
 > # 数字用の演算子:  <,  >, <=, >=, ==, !=, <=>
+
 > # 文字用の演算子:     lt, gt, le, ge, eq, ne, cmp, ., x
 
 
@@ -507,7 +508,7 @@ my %owner1 = (
 "name" => "Santa Claus",
 "DOB"  => "1882-12-25",
 );
-my $owner1 = \%owner1;
+my $owner1Ref = \%owner1;
 ```
 
 または、省略するすると(そして、行でデータ複雑な構造を宣言する時に、実際に使うべき形です):
