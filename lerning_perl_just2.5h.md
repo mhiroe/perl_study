@@ -1523,7 +1523,7 @@ use warnings;
 package Animal;
 
 sub eat {
-	# First argument is always the object to act upon.
+	# First argument is always the object to act upon. # 最初の引数は常に act される
 	my $self = shift @_;
 
 	foreach my $food ( @_ ) {
@@ -1543,10 +1543,6 @@ sub can_eat {
 return 1;
 ```
 
-** $self->can_eat() という使い方に注意 **
-- $selfはオブジェクト
-
-
 このクラスを使う次のように使うでしょう:
 ```
 require Animal;
@@ -1563,12 +1559,15 @@ print ref $animal;       # "Animal"
 注意: 文字通り、どのようなリファレンスも、どのようなクラスにでもblessすることができます。
 (1)リファレンスが実際にそのクラスのインスタンスとして使われているかと、(2)問題のクラスが存在し、ロードされているかを保証するのはあなた次第です。
 
-まだ、通常のやり方でオリジナルのハッシュを操作できます
+まだ、通常のやり方でオリジナルのハッシュを操作できます (ハッシュの方)
 
-print "Animal has ", $animal->{"legs"}, " leg(s)";
-ですが、同じ->オペレータでオブジェクトからメソッドを呼ぶこともできます。次のようにします:
+> print "Animal has ", $animal->{"legs"}, " leg(s)";
 
-$animal->eat("insects", "curry", "eucalyptus");
+
+ですが、同じ->オペレータでオブジェクトからメソッドを呼ぶこともできます。次のようにします: (オブジェクトの方)
+
+> $animal->eat("insects", "curry", "eucalyptus");
+
 最後の呼び出しは、Animal::eat($animal, "insects", "curry", "eucalyptus")と同じです。
 
 コンストラクタ
