@@ -793,49 +793,76 @@ foreach ( @array ) {
 
 
 #### ループ制御
-next と lastはループ進みを制御するのに使われます。多くのプログラミング言語では、それぞれ、continue と breakとなっています。オプションで、どのループにもラベルをつけることができます。慣例により、ラベルは全て大文字で書くことになっています。ループにラベルをつけることで、next と last にラベルを対象にできます。100以下の素数を見つける例です:
+next と lastはループ進みを制御するのに使われます。多くのプログラミング言語では、それぞれ、continue と breakとなっています。
+オプションで、どの`ループにもラベルをつける`ことができます。慣例により、ラベルは全て大文字で書くことになっています。
+ループにラベルをつけることで、next と last にラベルを対象にできます。
 
+- 100以下の素数を見つける例です:
+```
 CANDIDATE: for my $candidate ( 2 .. 100 ) {
+  print "=== RESTSART CANDIDATE ===","\n";
 	for my $divisor ( 2 .. sqrt $candidate ) {
+    print "sqrt:",sqrt ($candidate),"\n";
+    print "a:",$candidate,"\n";
+    print "b:",$divisor,"\n";
+    print "result:", $candidate % $divisor ,"\n";
 		next CANDIDATE if $candidate % $divisor == 0;
+    print "== PASS CANDIDATE ===","\n";
 	}
-	print $candidate." is prime\n";
+  # CANDIDATE % ループの最大回数 が　0にならない場合ここに入る
+	print "====================================== ", $candidate." is prime\n";
 }
-配列関数
-その場で配列を変更する
-@stackを使ってデモします:
+```
+`ラベル名: 繰り返し処理にラベルをつける ラベルに対して、繰り返し処理の制御を指示する`
+`next は冒頭のラベルに戻る`
 
+
+#### 配列関数
+その場で配列を変更する
+`配列を操作する`
+
+@stackを使ってデモします:
+```
 my @stack = ("Fred", "Eileen", "Denise", "Charlie");
 print @stack; # "FredEileenDeniseCharlie"
+```
 pop は配列の最後の要素を引き出して返します。スタックの上として考えられます:
-
+```
 print pop @stack; # "Charlie"
 print @stack;     # "FredEileenDenise"
+```
 push は追加の要素を配列の最後に付加します:
-
+```
 push @stack, "Bob", "Alice";
 print @stack; # "FredEileenDeniseBobAlice"
+```
 shift は配列の最初の要素を引き出して返します:
-
+```
 print shift @stack; # "Fred"
 print @stack;       # "EileenDeniseBobAlice"
+```
 unshift 配列の最初に新しい要素を挿入します:
-
+```
 unshift @stack, "Hank", "Grace";
 print @stack; # "HankGraceEileenDeniseBobAlice"
-pop、push、 shift、unshift は、全て、spliceの特別なケースです。splice は、配列のスライスを削除して、返します。別の配列スライスでそれを置き換えます:
-
+```
+pop、push、 shift、unshift は、`全てspliceの特別なケース`です。
+splice は、配列のスライスを削除して、返します。別の配列スライスでそれを置き換えます:
+```
 print splice(@stack, 1, 4, "<<<", ">>>"); # "GraceEileenDeniseBob"
 print @stack;                             # "Hank<<<>>>Alice"
-古い配列から新しい配列を作る
+```
+
+###  古い配列から新しい配列を作る
 Perlには以下の関数があり、配列に対して、新しい配列を作ります
 
 join 関数は多くの文字列を一つに結合します:
-
+```
 my @elements = ("Antimony", "Arsenic", "Aluminum", "Selenium");
 print @elements;             # "AntimonyArsenicAluminumSelenium"
 print "@elements";           # "Antimony Arsenic Aluminum Selenium"
 print join(", ", @elements); # "Antimony, Arsenic, Aluminum, Selenium"
+```
 リストコンテキストでは、reverse関数は逆順のリストを返します。スカラーコンテキストではreverseリストの全てをつなげて一つの文字列として、それを逆順にします。
 
 print reverse("Hello", "World");        # "WorldHello"
