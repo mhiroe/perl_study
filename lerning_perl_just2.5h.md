@@ -1359,10 +1359,12 @@ print $string, "\n"; # "r trnnr rf frrthrrs rr r trnnr rf brrcks" # 全て置き
 ### モジュールとパッケージ
 Perlにおいて、モジュールとパッケージは別物です。
 
-- モジュール: .pm
+- モジュール: require Foo::Bar
   - BEGIN されてるので main処理の前に読み込まれる
-  - return 1; で呼び出し元の.plに読み込みの成功を伝える
-- パッケージ： Foo::Bar::Bazz
+    - return 1; で呼び出し元の.plに読み込みの成功を伝える
+  - サブルーチンがどのモジュールに属するのかgrepしないとわからない
+- パッケージ： package Foo::Bar
+  -
 
 ### モジュール
 モジュールは、他のPerlファイル(スクリプトかモジュール)に含めることが出来る.pmファイルです。
@@ -1393,21 +1395,34 @@ Perlモジュールが入っているディレクトリが `環境変数PERL5LIB
 
 > export PERL5LIB=/foo/bar/baz:$PERL5LIB
 
-Perlモジュールが作られて、perlがそれがどこにあるかを知っていれば、組込のrequire関数を使って探し、Perlのスクリプト中で実行することができます。例えば、require Demo::StringUtilsを呼ぶと、PerlインタープリタはPERL5LIBにリストされているディレクトリを順番に、 Demo/StringUtils.pmというファイルを探します。モジュールがロードされたら、そこで定義されたサブルーチンは、突然にメインスクリプトから利用できるようになります。この例のスクリプトをmain.plと呼びましょう。続けて読んでくさい:
+Perlモジュールが作られて、perlがそれがどこにあるかを知っていれば、組込のrequire関数を使って探し、Perlのスクリプト中で実行することができます。
+例えば、`require Demo::StringUtils` を呼ぶと、PerlインタープリタはPERL5LIBにリストされているディレクトリを順番に`Demo/StringUtils.pm`というファイルを探します。
+モジュールがロードされたら、そこで定義されたサブルーチンは、突然にメインスクリプトから利用できるようになります。
+この例のスクリプトをmain.plと呼びましょう。続けて読んでくさい:
 
+`require Demo::StringUtils = Demo/StringUtils.pm`
+
+```
 use strict;
 use warnings;
 
 require Demo::StringUtils;
 
 print zombify("i want brains"); # "r wrnt brrrns"
-名前空間の区切りに::を使っているのに注意してください
+```
+`名前空間`の区切りに::を使っているのに注意してください
 
-ここで問題が表面化します: main.plが、多くのrequire を呼んでいて、それぞれのモジュールがさらにrequireを呼んでいる場合、zombify()サブルーチンの元の宣言がどこにあるのか、追いにくくなります。その解決策としては、パッケージを使うことです。
+ここで問題が表面化します: main.plが、多くのrequire を呼んでいて、それぞれのモジュールがさらにrequireを呼んでいる場合、
+zombify()サブルーチンの元の宣言がどこにあるのか、追いにくくなります。その解決策としては、パッケージを使うことです。
 
-パッケージ
-packageは名前空間で、その中で、サブルーチンを宣言できます。宣言したサブルーチンは、暗黙的に、現在のパッケージ内に宣言されます。実行の最初は、mainパッケージになりますが、組込関数のpackageを使って、パッケージを切り替えられます:
+`zombify()が どこのモジュールに含まれているかgrepしないとわからない`
 
+### パッケージ
+packageは名前空間で、その中でサブルーチンを宣言できます。
+宣言したサブルーチンは、暗黙的に、現在のパッケージ内に宣言されます。
+実行の最初は、mainパッケージになりますが、組込関数のpackageを使って、パッケージを切り替えられます:
+
+```
 use strict;
 use warnings;
 
@@ -1421,15 +1436,19 @@ package Food::Potatoes;
 sub subroutine {
 	print "kingedward";
 }
+```
+
 名前空間の区切りに::を使っているのに注意してください
 
-サブルーチンを呼んだときはいつでも、暗黙に現在のパッケージ内のサブルーチンを呼んでいます。代わりに、パッケージを明示的に書くこともできます。下のスクリプトを実行したら、何が起きるでしょうか:
-
-subroutine();                 # "kingedward"
+サブルーチンを呼んだときはいつでも、暗黙に`現在の`パッケージ内のサブルーチンを呼んでいます。
+代わりに、パッケージを明示的に書くこともできます。下のスクリプトを実行したら、何が起きるでしょうか:
+```
+subroutine();                 # "kingedward" # Food::Potatoes::subroutine() になってる
 main::subroutine();           # "universe"
 Food::Potatoes::subroutine(); # "kingedward"
+```
 ですので、上で述べた問題の論理的な解決策はC:\foo\bar\baz\Demo\StringUtils.pmか/foo/bar/baz/Demo/StringUtils.pmを変更することです:
-
+```
 use strict;
 use warnings;
 
@@ -1442,6 +1461,7 @@ sub zombify {
 }
 
 return 1;
+```
 そして、main.plを変更します
 
 use strict;
