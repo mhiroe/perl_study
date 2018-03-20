@@ -117,7 +117,7 @@ print "yes" == "no"; # "1" with two warnings; both values evaluate to 0 when use
 このレッスンでは、正しい状況で正しい演算子を使うようにしています。数字としてスカラを比較するのと、文字列としてスカラを比較するのとでは、演算子を区別します。:
 
 > 数字用の演算子:  <,  >, <=, >=, ==, !=, <=>
-> 文字用の演算子:     lt, gt, le, ge, eq, ne, cmp, ., x
+> 文字用の演算子:  lt, gt, le, ge, eq, ne, cmp, ., x
 
 ### 配列変数
 
