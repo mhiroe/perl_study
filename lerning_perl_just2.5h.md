@@ -863,34 +863,47 @@ print @elements;             # "AntimonyArsenicAluminumSelenium"
 print "@elements";           # "Antimony Arsenic Aluminum Selenium"
 print join(", ", @elements); # "Antimony, Arsenic, Aluminum, Selenium"
 ```
-リストコンテキストでは、reverse関数は逆順のリストを返します。スカラーコンテキストではreverseリストの全てをつなげて一つの文字列として、それを逆順にします。
-
+リストコンテキストでは、reverse関数は逆順のリストを返します。
+スカラーコンテキストではreverseリストの全てをつなげて一つの文字列として、それを逆順にします。
+```
 print reverse("Hello", "World");        # "WorldHello"
 print reverse("HelloWorld");            # "HelloWorld"
 print scalar reverse("HelloWorld");     # "dlroWolleH"
 print scalar reverse("Hello", "World"); # "dlroWolleH"
-map関数は入力として配列をとり、配列内の全てのスカラ $_を操作します。結果として新しい配列を作ります。操作はひとつのブレースで渡します:
+```
+map関数は入力として配列をとり、配列内の全てのスカラ `$_`を操作します。
+結果として新しい配列を作ります。操作はひとつのブレースで渡します:
 
+```
 my @capitals = ("Baton Rouge", "Indianapolis", "Columbus", "Montgomery", "Helena", "Denver", "Boise");
 
 print join ", ", map { uc $_ } @capitals;
 # "BATON ROUGE, INDIANAPOLIS, COLUMBUS, MONTGOMERY, HELENA, DENVER, BOISE"
-grep関数は入力として配列をとり、フィルターされた配列を出力します。シンタックスはmapと似ています。今度は、第二引数は入力された配列の各スカラ$_を評価されます。ブーリアンで真の値が戻れば、スカラは配列として出力されますが、そうでなければ、出力されません。
+```
+grep関数は入力として配列をとり、`フィルターされた配列を出力`します。
+シンタックスはmapと似ています。今度は、第二引数は入力された配列の各スカラ`$_`を評価されます。
+ブーリアンで真の値が戻れば、スカラは配列として出力されますが、そうでなければ出力されません。
 
+```
 print join ", ", grep { length $_ == 6 } @capitals;
 # "Helena, Denver"
-当然、結果の配列の長さは、マッチに成功した数になります、このとことは、grepを配列に要素があるかどうかを素早くチェックするのに使えることを意味します。:
+```
+当然、結果の配列の長さは、マッチに成功した数になります
+このとことは、grepを配列に要素があるかどうかを素早くチェックするのに使えることを意味します。:
 
-print scalar grep { $_ eq "Columbus" } @capitals; # "1"
-grep と map は、リスト包含の形に含まれます。他の多くのプログラミング言語に目立って欠けている、例外的に強力な機能です。
+> print scalar grep { $_ eq "Columbus" } @capitals; # "1"
+
+grep と map は、`リスト包含の形`に含まれます。他の多くのプログラミング言語に目立って欠けている、例外的に強力な機能です。
 
 デフォルトでは、sort関数は入力された配列を文字順(アルファベット順)に並びかえます:
-
+```
 my @elevations = (19, 1, 2, 100, 3, 98, 100, 1056);
 
 print join ", ", sort @elevations;
 # "1, 100, 100, 1056, 19, 2, 3, 98"
-しかし、grep と mapと似て、自分のコードを渡すことも出来ます。ソートは常に2要素間の一連の比較を使ってされます。コードブロックは、$aと$bを受け、$aが$b"より小さ"ければ -1、"同じ"であれば 0、$aが$b"より大き"ければ 1 を返します。
+```
+しかし、grep と mapと似て、自分のコードを渡すことも出来ます。
+ソートは常に2要素間の一連の比較を使ってされます。コードブロックは、$aと$bを受け、$aが$b"より小さ"ければ -1、"同じ"であれば 0、$aが$b"より大き"ければ 1 を返します。
 
 cmp 演算子は文字列に対して、まさにこれをします:
 
