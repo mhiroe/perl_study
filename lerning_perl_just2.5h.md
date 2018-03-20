@@ -192,7 +192,6 @@ print '@array';         # "@array"
 ```
 
 #### ハッシュ変数
-
 ハッシュ変数は文字でインデックスされたスカラのリストです。Pythonではdictionary、PHPではarrayになります。
 
 ```
@@ -248,7 +247,6 @@ print $data{"0"}; # "blue"
 ```
 
 #### リスト
-
 Perlにおけるリストは配列やハッシュとは違うものです。既にいくつかのリストがありました:
 
 ```
@@ -332,7 +330,6 @@ print @parts;
 詳細は後ほど。
 
 ### コンテキスト
-
 Perlの最も特徴のあるところは、コードが`コンテクストセンシティブ`なところです。Perlの全ての式はスカラコンテキストかリストコンテキストで評価されます。
 スカラかリストをのいずれかを作るかを期待されているかに依存します。多くのPerlの式と組込の関数は、それが評価されるコンテキストによって、振る舞いに根本的に違いを見せます。
 
@@ -379,7 +376,6 @@ print $scalar, @array, 98; # "-X-AlphaBetaGoo98";
 サブルーチンがスカラコンテキストで評価されるときにスカラを返すような法律やシンタックスにはあなたは縛られていませんし、また、リストコンテキストでリストを返すこともまた同じです。上で見たように、Perlは完全にあなたのために結果を作ることができます。
 
 ####  リファレンスとネストされたデータ構造
-
 リストが要素としてリストを含めないのと同様、配列とハッシュは他の配列やハッシュを要素として持てません。 両方ともスカラしか持てません。 今から試すことをよく見てください:
 
 ```
@@ -437,10 +433,9 @@ print ${ $hashRef }{"Helium"};  # use a reference to get to the hash
 print $hashRef->{"Helium"};     # exactly the same thing - this is very common
 ```
 
-- リファレンスから値を取る方法
+- リファレンスを解く方法
   - ブレース
-    - 無名ハッシュのキーから値を取ってきて、スカラー値にしてるように見える
-  - アロー演算子で取り出す
+  - アロー演算子
     - *モジュールからメソッドを呼ぶ時はどうだったか意識してみる*
 
 ### データ構造を宣言する
@@ -480,10 +475,12 @@ my %account = (
 > my @owners = ( \%owner1, \%owner2 );
 
 
-別の記号を使って無名配列やハッシュを宣言することも出来ます。四角いブラケットを無名配列に、ブレースを無名ハッシュに使います。それぞれ、返される値は、無名のデータ構造のリファレンスになります。注意して見てください。次の結果は、上の%accountと全く同じです:
+別の記号を使って無名配列やハッシュを宣言することも出来ます。
+四角いブラケットを無名配列に、ブレースを無名ハッシュに使います。それぞれ、返される値は、無名のデータ構造のリファレンスになります。
+注意して見てください。次の結果は、上の%accountと全く同じです:
 
 ```
-# Braces denote an anonymous hash 無名ハッシュのリファレンスを得る
+# Braces denote an anonymous hash # 無名ハッシュのリファレンス
 my $owner1Ref = {
 	"name" => "Santa Claus",
 	"DOB"  => "1882-12-25",
@@ -495,7 +492,7 @@ my $owner2Ref = {
 };
 
 # Square brackets denote an anonymous array
-my $ownersRef = [ $owner1Ref, $owner2Ref ]; #無名配列のリファレンスを得る
+my $ownersRef = [ $owner1Ref, $owner2Ref ]; #無名配列のリファレンス
 
 my %account = (
 	"number" => "12345678",
@@ -504,12 +501,17 @@ my %account = (
 );
 ```
 
-`2つの無名ハッシュのリファレンスを無名配列に入れて、さらにそのリファレンスを得る`
-
-
+- 一行目は下記と等しい
+```
+my %owner1 = (
+"name" => "Santa Claus",
+"DOB"  => "1882-12-25",
+);
+my $owner1 = \%owner1;
+```
 
 または、省略するすると(そして、行でデータ複雑な構造を宣言する時に、実際に使うべき形です):
-
+```
 my %account = (
 	"number" => "31415926",
 	"opened" => "3000-01-01",
@@ -524,11 +526,15 @@ my %account = (
 		},
 	],
 );
-データ構造から情報を取り出す
-さて、いじくりまわすために%accountがまだあるとしましょう。ですが、全ての他のもの(他のものがあったなら)は、スコープの外に落ちます。それぞれのケースで同じ手順を逆向きにすることで、情報を表示できます。もう一度、4つの例がありますが、最後のものが一番有用です。
+```
 
+#### データ構造から情報を取り出す
+さて、いじくりまわすために%accountがまだあるとしましょう。ですが、全ての他のもの(他のものがあったなら)は、スコープの外に落ちます。
+それぞれのケースで同じ手順を逆向きにすることで、情報を表示できます。もう一度、4つの例がありますが、最後のものが一番有用です。
+```
 my $ownersRef = $account{"owners"};
 my @owners    = @{ $ownersRef };
+
 my $owner1Ref = $owners[0];
 my %owner1    = %{ $owner1Ref };
 my $owner2Ref = $owners[1];
@@ -538,8 +544,10 @@ print "Opened on ", $account{"opened"}, "\n";
 print "Joint owners:\n";
 print "\t", $owner1{"name"}, " (born ", $owner1{"DOB"}, ")\n";
 print "\t", $owner2{"name"}, " (born ", $owner2{"DOB"}, ")\n";
+```
 または, 省略して:
 
+```
 my @owners = @{ $account{"owners"} };
 my %owner1 = %{ $owners[0] };
 my %owner2 = %{ $owners[1] };
@@ -548,8 +556,9 @@ print "Opened on ", $account{"opened"}, "\n";
 print "Joint owners:\n";
 print "\t", $owner1{"name"}, " (born ", $owner1{"DOB"}, ")\n";
 print "\t", $owner2{"name"}, " (born ", $owner2{"DOB"}, ")\n";
+```
 または、リファレンスと-> を使って:
-
+```
 my $ownersRef = $account{"owners"};
 my $owner1Ref = $ownersRef->[0];
 my $owner2Ref = $ownersRef->[1];
@@ -558,14 +567,17 @@ print "Opened on ", $account{"opened"}, "\n";
 print "Joint owners:\n";
 print "\t", $owner1Ref->{"name"}, " (born ", $owner1Ref->{"DOB"}, ")\n";
 print "\t", $owner2Ref->{"name"}, " (born ", $owner2Ref->{"DOB"}, ")\n";
+```
 そして、全ての中間の値をスキップするなら:
-
+```
 print "Account #", $account{"number"}, "\n";
 print "Opened on ", $account{"opened"}, "\n";
 print "Joint owners:\n";
 print "\t", $account{"owners"}->[0]->{"name"}, " (born ", $account{"owners"}->[0]->{"DOB"}, ")\n";
 print "\t", $account{"owners"}->[1]->{"name"}, " (born ", $account{"owners"}->[1]->{"DOB"}, ")\n";
-配列のリファレンスで自分で自分の足を撃つ方法
+```
+
+### 配列のリファレンスで自分で自分の足を撃つ方法
 次の配列には5つの要素があります:
 
 my @array1 = (1, 2, 3, 4, 5);
