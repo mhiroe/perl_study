@@ -538,6 +538,7 @@ my $owner1Ref = $owners[0];
 my %owner1    = %{ $owner1Ref };
 my $owner2Ref = $owners[1];
 my %owner2    = %{ $owner2Ref };
+
 print "Account #", $account{"number"}, "\n";
 print "Opened on ", $account{"opened"}, "\n";
 print "Joint owners:\n";
@@ -547,25 +548,25 @@ print "\t", $owner2{"name"}, " (born ", $owner2{"DOB"}, ")\n";
 または, 省略して:
 
 ```
+my $ownersRef = $account{"owners"};
+my @owners    = @{ $ownersRef };
+↓
 my @owners = @{ $account{"owners"} };
+
+my $owner1Ref = $owners[0];
+my %owner1    = %{ $owner1Ref };
+↓
 my %owner1 = %{ $owners[0] };
-my %owner2 = %{ $owners[1] };
-print "Account #", $account{"number"}, "\n";
-print "Opened on ", $account{"opened"}, "\n";
-print "Joint owners:\n";
-print "\t", $owner1{"name"}, " (born ", $owner1{"DOB"}, ")\n";
-print "\t", $owner2{"name"}, " (born ", $owner2{"DOB"}, ")\n";
 ```
 または、リファレンスと-> を使って:
 ```
-my $ownersRef = $account{"owners"};
+my %owner1    = %{ $owner1Ref };
+↓
 my $owner1Ref = $ownersRef->[0];
-my $owner2Ref = $ownersRef->[1];
-print "Account #", $account{"number"}, "\n";
-print "Opened on ", $account{"opened"}, "\n";
-print "Joint owners:\n";
+
+print "\t", $owner1{"name"}, " (born ", $owner1{"DOB"}, ")\n";
+↓
 print "\t", $owner1Ref->{"name"}, " (born ", $owner1Ref->{"DOB"}, ")\n";
-print "\t", $owner2Ref->{"name"}, " (born ", $owner2Ref->{"DOB"}, ")\n";
 ```
 そして、全ての中間の値をスキップするなら:
 ```
@@ -578,23 +579,30 @@ print "\t", $account{"owners"}->[1]->{"name"}, " (born ", $account{"owners"}->[1
 
 ### 配列のリファレンスで自分で自分の足を撃つ方法
 次の配列には5つの要素があります:
-
+```
 my @array1 = (1, 2, 3, 4, 5);
 print @array1; # "12345"
-しかし、次の配列には*ひとつ*の要素(無名の5つの要素の配列のリファレンス)があります:
-
-my @array2 = [1, 2, 3, 4, 5];
+```
+しかし、次の配列には *ひとつ* の要素(無名の5つの要素の配列のリファレンス)があります:
+```
+my @array2 = [1, 2, 3, 4, 5]; # 無名配列
 print @array2; # e.g. "ARRAY(0x182c180)"
+```
 次の スカラ は、無名の5つの要素の配列のリファレンスになります:
-
+```
 my $array3Ref = [1, 2, 3, 4, 5];
 print $array3Ref;      # e.g. "ARRAY(0x22710c0)"
 print @{ $array3Ref }; # "12345"
 print @$array3Ref;     # "12345"
-条件
-if ... elsif ... else ...
+```
+
+### 条件
+
+#### if ... elsif ... else ...
+
 elsifのスペル以外には驚くものはありません:
 
+```
 my $word = "antidisestablishmentarianism";
 my $strlen = length $word;
 
@@ -605,10 +613,15 @@ if($strlen >= 15) {
 } else {
 	print "'", $word, "' is a short word";
 }
+```
+
 Perlにはより短い "ステートメント if 条件"のシンタックスがあります。短いステートメント用に、強く推奨されます:
 
-print "'", $word, "' is actually enormous" if $strlen >= 20;
-unless ... else ...
+> print "'", $word, "' is actually enormous" if $strlen >= 20;
+
+
+#### unless ... else ...
+```
 my $temperature = 20;
 
 unless($temperature > 30) {
@@ -616,27 +629,46 @@ unless($temperature > 30) {
 } else {
 	print $temperature, " degrees Celsius is actually pretty hot";
 }
-unlessブロックは災いのように避けるのが一番です。それらは混乱のもととなります。"unless [... else]"ブロックは簡単に、"if [... else]" ブロックに、条件を否定する[または、条件をそのままにブロックを交換する]ことでリファクタできます。幸い、 elsunlessのキーワードはありません。
+````
+unlessブロックは *災いのように避ける* のが一番です(使わないこと！)それらは混乱のもととなります。
+"unless [... else]"ブロックは簡単に、"if [... else]" ブロックに、条件を否定する[または、条件をそのままにブロックを交換する]ことでリファクタできます。
+幸い、 elsunlessのキーワードはありません。
 
 一方で、以下は読みやすさのために、強く推奨されます
 
-print "Oh no it's too cold" unless $temperature > 15;
-三項演算子
-三項演算子 ?: は、単純な if ステートメントをひとつのステートメントに埋め込めます。三項演算子の標準的な使い方として、単数/複数の形があります:
+> print "Oh no it's too cold" unless $temperature > 15;
 
+
+#### 三項演算子
+
+`三項演算子： ( 条件 ? trueの場合 : falseの場合 )`
+
+三項演算子 `?:` は、単純な if ステートメントをひとつのステートメントに埋め込めます。
+三項演算子の標準的な使い方として、単数/複数の形があります:
+`三項演算子は、しばしば単数か複数かを判定するのに使われる`
+
+```
 my $gain = 48;
 print "You gained ", $gain, " ", ($gain == 1 ? "experience point" : "experience points"), "!";
-余談: 両方のケースの単数と複数を完全に書き出されています。決して以下のような巧妙なことをしないでください。コードを検索して、"tooth"か"teeth"の単語を置き換えようとしても、この行から見つけることができません。
+```
+余談: 両方のケースの単数と複数を完全に書き出されています。決して以下のような巧妙なことをしないでください。
+コードを検索して、"tooth"か"teeth"の単語を置き換えようとしても、この行から見つけることができません。
 
+> ? "tooth" : "teeth" とすべき
+
+```
 my $lost = 1;
 print "You lost ", $lost, " t", ($lost == 1 ? "oo" : "ee"), "th!";
+```
+
 三項演算子はネストできます:
 
 my $eggs = 5;
 print "You have ", $eggs == 0 ? "no eggs" :
                    $eggs == 1 ? "an egg"  :
                    "some eggs";
-if文では、これらの条件がはスカラコンテキストで価されます。if(@array)は、@arrayにひとつ以上のエレメントがある場合のみ、真となります。配列の中の値が何かは問題にしません - 全てがundefや他の偽の値でも
+if文では、これらの条件がはスカラコンテキストで価されます。if(@array)は、@arrayにひとつ以上のエレメントがある場合のみ、真となります。
+配列の中の値が何かは問題にしません - 全てがundefや他の偽の値でも
 
 ループ
 やりかたはひとつではありません。
