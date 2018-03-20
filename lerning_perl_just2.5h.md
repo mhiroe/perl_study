@@ -1310,27 +1310,43 @@ my $string = "a tonne of feathers or a tonne of bricks";
 while($string =~ m/(\w+)/g) {
   print "'".$1."'\n";
 }
+->  (\w+)の、他のマッチする奴を探すので,一文字ずつ全部帰ってきた
 ```
 リストコンテキストでは、=~ m//g呼び出しは、マッチしたものを一度に全部返します。
 ```
 my @matches = $string =~ m/(\w+)/g;
 print join ", ", map { "'".$_."'" } @matches;
 ```
-=~ s///g呼び出しはグローバルな検索/置換でマッチした数を返します。ここでは、すべての母音を文字"r"に置換しています。
+- まとめ
+```
+my $matches = $string =~ m/(\w+)/g;
+print "'".$1."'\n";
+
+# 返ってくるの-> 'a'
+my @matches = $string =~ m/(\w+)/g;
+print @matches;
+# 返ってくるの -> tonneoffeathersoratonneofbricks
+```
+
+- =~ s///g呼び出しはグローバルな検索/置換でマッチした数を返します。
+ここでは、すべての母音を文字"r"に置換しています。
+```
+my $string = "a tonne of feathers or a tonne of bricks";
 
 # Try once without /g.
 $string =~ s/[aeiou]/r/;
-print $string; # "r tonne of feathers or a tonne of bricks"
+print $string; # "r tonne of feathers or a tonne of bricks" #一文字目だけ置き換わる
 
-# Once more.
+# Once more. #　再実行
 $string =~ s/[aeiou]/r/;
-print $string; # "r trnne of feathers or a tonne of bricks"
+print $string; # "r trnne of feathers or a tonne of bricks" #二文字目のみ
 
 # And do all the rest using /g
 $string =~ s/[aeiou]/r/g;
-print $string, "\n"; # "r trnnr rf frrthrrs rr r trnnr rf brrcks"
-/i フラグはマッチと置換をケースインセンシティブにします。
-
+print $string, "\n"; # "r trnnr rf frrthrrs rr r trnnr rf brrcks" # 全て置き換わる
+```
+- `/i` フラグはマッチと置換をケースインセンシティブにします。
+```
 "Hello world" =~ m/
   (\w+) # one or more word characters
   [ ]   # single literal space, stored inside a character class
@@ -1338,12 +1354,22 @@ print $string, "\n"; # "r trnnr rf frrthrrs rr r trnnr rf brrcks"
 /x;
 
 # returns true
-モジュールとパッケージ
+```
+
+### モジュールとパッケージ
 Perlにおいて、モジュールとパッケージは別物です。
 
-モジュール
-A モジュールは、他のPerlファイル(スクリプトかモジュール)に含めることが出来る.pmファイルです。モジュールは .pl Perlスクリプトとまったく同じシンタックのステキストファイルです。例のモジュールは、C:\foo\bar\baz\Demo\StringUtils.pm か /foo/bar/baz/Demo/StringUtils.pmにあります。続きを読んでください:
+- モジュール: .pm
+  - BEGIN されてるので main処理の前に読み込まれる
+  - return 1; で呼び出し元の.plに読み込みの成功を伝える
+- パッケージ： Foo::Bar::Bazz
 
+### モジュール
+モジュールは、他のPerlファイル(スクリプトかモジュール)に含めることが出来る.pmファイルです。
+モジュールは .pl Perlスクリプトとまったく同じシンタックのステキストファイルです。
+例のモジュールは、C:\foo\bar\baz\Demo\StringUtils.pm か /foo/bar/baz/Demo/StringUtils.pmにあります。続きを読んでください:
+
+```
 use strict;
 use warnings;
 
@@ -1354,14 +1380,19 @@ sub zombify {
 }
 
 return 1;
+```
 モジュールはロードされると、最初から最後まで実行されるので、ロードが成功したことを示すために、最後に真の値を返す必要があります。
 
-Perlインタープリタはそれらを見つけることができるためには、perlを呼ぶ前に、Perlモジュールが入っているディレクトリが環境変数PERL5LIBにリストされているべきです。モジュールが入っているルートディレクトリをリストしてください。モジュールのディレクトリやモジュール自身をリストしてはいけません。
+Perlインタープリタはそれらを見つけることができるためには、perlを呼ぶ前に、
+Perlモジュールが入っているディレクトリが `環境変数PERL5LIB`にリストされているべきです。
+モジュールが入っているルートディレクトリをリストしてください。モジュールのディレクトリやモジュール自身をリストしてはいけません。
 
-set PERL5LIB=C:\foo\bar\baz;%PERL5LIB%
+> set PERL5LIB=C:\foo\bar\baz;%PERL5LIB%
+
 または
 
-export PERL5LIB=/foo/bar/baz:$PERL5LIB
+> export PERL5LIB=/foo/bar/baz:$PERL5LIB
+
 Perlモジュールが作られて、perlがそれがどこにあるかを知っていれば、組込のrequire関数を使って探し、Perlのスクリプト中で実行することができます。例えば、require Demo::StringUtilsを呼ぶと、PerlインタープリタはPERL5LIBにリストされているディレクトリを順番に、 Demo/StringUtils.pmというファイルを探します。モジュールがロードされたら、そこで定義されたサブルーチンは、突然にメインスクリプトから利用できるようになります。この例のスクリプトをmain.plと呼びましょう。続けて読んでくさい:
 
 use strict;
