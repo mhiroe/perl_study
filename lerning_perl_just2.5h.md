@@ -474,7 +474,7 @@ print $hashRef->{"Helium"};     # exactly the same thing - this is very common
 - リファレンスを解く方法
   - ブレース
   - アロー演算子
-    - *モジュールからメソッドを呼ぶ時はどうだったか意識してみる*
+    - オブジェクト志向の場合、オブジェクト->メソッド() という使われ方
 
 ### データ構造を宣言する
 4つの例があります。ですが、実践的には、最後のものがもっとも有用です。
@@ -1310,7 +1310,7 @@ my $string = "a tonne of feathers or a tonne of bricks";
 while($string =~ m/(\w+)/g) {
   print "'".$1."'\n";
 }
-->  (\w+)の、他のマッチする奴を探すので,一文字ずつ全部帰ってきた
+# (\w+)の、他のマッチする奴を探すので,一文字ずつ全部帰ってきた
 ```
 リストコンテキストでは、=~ m//g呼び出しは、マッチしたものを一度に全部返します。
 ```
@@ -1322,10 +1322,10 @@ print join ", ", map { "'".$_."'" } @matches;
 my $matches = $string =~ m/(\w+)/g;
 print "'".$1."'\n";
 
-# 返ってくるの-> 'a'
+# 'a'
 my @matches = $string =~ m/(\w+)/g;
 print @matches;
-# 返ってくるの -> tonneoffeathersoratonneofbricks
+# tonneoffeathersoratonneofbricks
 ```
 
 - =~ s///g呼び出しはグローバルな検索/置換でマッチした数を返します。
@@ -1509,13 +1509,14 @@ PerlはOOプログラミングに、あまり適した言語ではありませ�
 blessにより、どのクラスがどのリファレントに属するのかを分かるようになります。
 リファレンスのリファレントがどのクラスに属しているかをみつけるためには、refを使います
 
-メソッドは単純に第一引数オブジェクト(または、クラスメソッドであれば、パッケージ名)であるサブルーチンです。
-オブジェクトメソッドは、$obj->method()を使って呼び出されます; クラスメソッドはPackage::Name->method()です。
+**メソッドは単純に第一引数オブジェクト(または、クラスメソッドであれば、パッケージ名)であるサブルーチンです。**
 
-クラスは単純にメソッドを含むパッケージです。
+**オブジェクトメソッドは、$obj->method()を使って呼び出されます; クラスメソッドはPackage::Name->method()です**
+
+クラスは単純に`メソッド`を含むパッケージです。
 
 以下、簡単な例でそれをはっきりさせます。 例のモジュールとしてAnimal.pmのクラスAnimalは、次のようになります:
-
+```
 use strict;
 use warnings;
 
@@ -1540,8 +1541,14 @@ sub can_eat {
 }
 
 return 1;
-このクラスを使う次のように使うでしょう:
+```
 
+** $self->can_eat() という使い方に注意 **
+- $selfはオブジェクト
+
+
+このクラスを使う次のように使うでしょう:
+```
 require Animal;
 
 my $animal = {
@@ -1549,9 +1556,12 @@ my $animal = {
 	"colour" => "brown",
 };                       # $animal is an ordinary hash reference
 print ref $animal;       # "HASH"
-bless $animal, "Animal"; # now it is an object of class "Animal"
+bless $animal, "Animal"; # now it is an object of class "Animal" ここでAnimalクラスのオブジェクトになる
+
 print ref $animal;       # "Animal"
-注意: 文字通り、どのようなリファレンスも、どのようなクラスにでもblessすることができます。(1)リファレンスが実際にそのクラスのインスタンスとして使われているかと、(2)問題のクラスが存在し、ロードされているかを保証するのはあなた次第です。
+```
+注意: 文字通り、どのようなリファレンスも、どのようなクラスにでもblessすることができます。
+(1)リファレンスが実際にそのクラスのインスタンスとして使われているかと、(2)問題のクラスが存在し、ロードされているかを保証するのはあなた次第です。
 
 まだ、通常のやり方でオリジナルのハッシュを操作できます
 
