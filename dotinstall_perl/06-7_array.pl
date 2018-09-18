@@ -42,4 +42,5 @@ print @sales2[0..1]; # 単一の値ではないので @(配列)になる
 print "\n\n";
 
 # @sales -> $#sales が自動的に作られる = 末尾の添字
+print $#sales2; #末尾の添字を得られる
 print @sales2[1..$#sales]; # 1から末尾までの要素を取り出す

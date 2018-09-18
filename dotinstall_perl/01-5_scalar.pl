@@ -43,15 +43,19 @@ print "hello wolrd\n"; # ()は省略可能
 
 my $msg;
 $msg = "hello wolrd variable\n";
-
 print $msg;
+
+# 変数の宣言と値の代入は同時にできる
+my $msg2 = "hello wolrd variable\n";
+print $msg2;
+
 
 # 04. 数値を扱ってみよう
 
 my $x =10;
 my $y = 10.7; # 小数
 my $z = 123235235;
-my $z2 = 123_235_235; # "_"を含めても無視される、見やすくする書き方
+my $z2 = 123_235_235; # 数値は "_"を含めても無視される、見やすくする書き方
 
 # 演算子
 # = 代入演算子
@@ -73,15 +77,17 @@ print $x . "\n";
 
 # 05.文字列を扱ってみよう
 
-# スカラー変数 文字rつ
+# スカラー変数 文字列
 
-my $a = "he\tllo"; # 変数展開 \n(改行) \t(tab)
+my $a = "he\tllo"; # 変数展開 特殊文字が使える \n(改行) \t(tab)
 my $b = 'he\tllo'; # 変数展開しない
 
 print $a;
 
-# .(ピリオド)
+# 文字列の演算子
+
+# .(ピリオド) 連結
 print "mon" . "san"; # 文字列の連結
 
-# x (エックス)
-print  "x" x 5; # 繰り返し
+# x (エックス) 繰り返し
+print  "hello" x 5; # 5回 hello 出力される
