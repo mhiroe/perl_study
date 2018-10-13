@@ -5,7 +5,6 @@ use warnings;
 
 # iが0から9までカウントされる
 my $i = 0;
-
 while ($i < 10){
   print "i = $i\n";
   $i++;
