@@ -11,7 +11,7 @@ foreach my $color (@colors){
   print "color = $color˜\n";
 }
 print "\n14.2-----------------------\n";
-# forとforeachは同じ
+# forとforeachは全く同じ
 for my $color (@colors){
   print "color = $color˜\n";
 }

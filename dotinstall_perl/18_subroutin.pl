@@ -31,7 +31,7 @@ sub max2{
   # shift() 先頭の要素を抜きだす
   # 先頭の12がmaxに入れられて、shift(@_)は12が消された状態(8-12の配列)になる
   my $max2 = shift(@_);
-  foreach (@_){
+  foreach (@_){ # 8以降の要素を順番に比較してmax2を書き換える
     $max2 = $_ if $_ > $max2;
   }
   $max2;
