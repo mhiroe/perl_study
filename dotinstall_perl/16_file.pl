@@ -30,7 +30,7 @@ open(my $out, ">", "test.out") or die("coud not open file.");
 
 while(<$in2>){
   # 行にはいっているものを$outに入力
-  print $out $_;
+  print $out $_; # print 先を $out にして $_を出力している
 }
 # ファイルの入出力を終了する
 close($in2);
