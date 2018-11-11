@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 
+
 ## data declation
 my @skipper = qw(blue_shirt hat jacket preserver sunscreen);
 my @skipper_with_name = ('Skipper' => \@skipper);
