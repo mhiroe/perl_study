@@ -16,12 +16,12 @@ use File::Find;
 #       },@starting_directories,
 # );
 
-# ## クロージャ
-# my $total_size = 0;
-# find(sub {
-#   $total_size += -s if -f }, '.'
-# );
-# print $total_size, "\n";
+## クロージャ
+my $total_size = 0;
+find(sub {
+  $total_size += -s if -f }, 'bin'
+);
+print $total_size, "\n";
 
 
 # my $callback;
@@ -34,16 +34,23 @@ use File::Find;
 # print "\n";
 # find($callback, '.'); # $countが生きてるので 続きのカウントから再開される
 
-# 7.5 サブルーチンのサブルーチン
-sub create_find_callback_that_counts {
-  my $count = 0;
-  return sub { print ++$count, ": $File::Find::name\n" };
-}
-
-# my $callback = sub {
-#   my $count = 0;
+# # 7.5 サブルーチンのサブルーチン
+# sub create_find_callback_that_counts {
+#   # my $count = 0;
+#   my $count;
 #   return sub { print ++$count, ": $File::Find::name\n" };
-# };
-
-my $callback = create_find_callback_that_counts;
-find($callback, '.');
+# }
+#
+# # my $callback = sub {
+# #   my $count = 0;
+# #   return sub { print ++$count, ": $File::Find::name\n" };
+# # };
+#
+# # 無名code_refだとちゃんと $countの値が残る
+# my $callback =  create_find_callback_that_counts;
+# find($callback, '.');
+# find($callback, '.');
+# # code_refにちゃんとした場合 $countの値は残らない
+# # print my $callback =  \&create_find_callback_that_counts;
+# # find(&{$callback}, '.');
+# # find(&{$callback}, '.');
