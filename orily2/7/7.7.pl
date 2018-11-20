@@ -30,4 +30,3 @@ find($find_by_min_size10, 'bin');
 
 # クロージャ変数取り出し方わからん..
 print "@files";
-print
