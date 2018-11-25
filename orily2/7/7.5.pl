@@ -1,5 +1,7 @@
 use strict;
 use warnings;
+use Data::Dumper;
+use Data::Dump::Streamer;
 
 # use File::Find;
 # sub create_find_callback_that_counts {
@@ -36,18 +38,25 @@ use warnings;
 
 # サブルーチンを２つ用意する
 use File::Find;
+
 sub create_find_callbacks_that_sum_the_size {
   my $total_size = 0;
-  return(
-    sub { $total_size += -s if -f},
-    sub { return $total_size }
-  );
+  # return(
+  #   sub { $total_size += -s if -f},
+  #   sub { return $total_size }
+  # );
+  sub { $total_size += -s if -f},
+  sub { return $total_size };# これでもok returnなくても実行している
 }
 
 # ２つのサブルーチンref
 my ($count_em, $get_results) = create_find_callbacks_that_sum_the_size( );
-find($count_em, 'bin'); # コールバックとして呼ぶ
+find($count_em, '.'); # コールバックとして呼ぶ
 # my $total_size = &$get_results( );
-# my $total_size = $get_results->(); # find経由しないで 直接呼ぶ
-my $total_size = $count_em->(); # count_em は役割が固定されてしまっている
+# my $total_size = &$count_em( ); # これはNG
+# my $total_size = $get_results->(); # デリファレンス 違う書き方
+my $total_size = $get_results; # 思いっきり省略
 print "total size of bin is $total_size\n";
+
+Dump $count_em;
+Dump $get_results;
