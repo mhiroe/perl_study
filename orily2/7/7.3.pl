@@ -1,5 +1,7 @@
 use strict;
 use warnings;
+use Data::Dumper;
+use Data::Dump::Streamer;
 
 ## callback 見つかった時点で 何かしらアクションする (呼ばれるアクションによくhashref使われる)
 use File::Find;
@@ -36,23 +38,33 @@ find($callback, 'bin');
 print "\n";
 find($callback, '.'); # $countが生きてるので 続きのカウントから再開される
 
-# # 7.5 サブルーチンのサブルーチン
-# sub create_find_callback_that_counts {
-#   # my $count = 0;
-#   my $count;
+# 7.5 サブルーチンのサブルーチン
+sub create_find_callback_that_counts {
+  my $count = 0;
+  my $count;
+  sub { print ++$count, ": $File::Find::name\n" };
+  # return sub { print ++$count, ": $File::Find::name\n" };
+}
+
+# my $callback = sub {
+#   my $count = 0;
 #   return sub { print ++$count, ": $File::Find::name\n" };
-# }
-#
-# # my $callback = sub {
-# #   my $count = 0;
-# #   return sub { print ++$count, ": $File::Find::name\n" };
-# # };
-#
-# # 無名code_refだとちゃんと $countの値が残る
-# my $callback =  create_find_callback_that_counts;
+# };
+
+# 無名code_refだとちゃんと $countの値が残る
+my $callback =  create_find_callback_that_counts();
+my $callback2 =  create_find_callback_that_counts;
+my $callback3 =  create_find_callback_that_counts->();
+# print Dumper $callback;
+# print Dumper $callback2;
+print Dumper $callback3;
+
+
 # find($callback, '.');
 # find($callback, '.');
-# # code_refにちゃんとした場合 $countの値は残らない
-# # print my $callback =  \&create_find_callback_that_counts;
-# # find(&{$callback}, '.');
-# # find(&{$callback}, '.');
+# code_refにちゃんとした場合 $countの値は残らない
+# print my $callback =  \&create_find_callback_that_counts;
+# find(&{$callback}, '.');
+# find(&{$callback}, '.');
+
+dump $callback3;
