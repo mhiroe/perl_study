@@ -26,15 +26,17 @@ use File::Find;
 # print $total_size, "\n";
 
 
-# my $callback;
-# {
-#   my $count = 0; # グローバルで宣言していないのがポイント
-#   $callback = sub { print ++$count, ": $File::Find::name\n" };
-#   ## 1から始まるインクリメント
-# }
-# find($callback, '.');
-# print "\n";
-# find($callback, '.'); # $countが生きてるので 続きのカウントから再開される
+my $callback;
+{
+  my $count = 0; # グローバルで宣言していないのがポイント
+  my $total_size = 0;
+  # $callback = sub { print ++$count, ": $File::Find::name\n" };
+  $callback = sub { print ++$count,": $File::Find::name    " ; $total_size += -s if -f ; print "$total_size\n";};
+  ## 1から始まるインクリメント
+}
+find($callback, 'bin');
+print "\n";
+find($callback, '.'); # $countが生きてるので 続きのカウントから再開される
 
 # 7.5 サブルーチンのサブルーチン
 sub create_find_callback_that_counts {
