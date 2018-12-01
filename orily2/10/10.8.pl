@@ -24,29 +24,32 @@ sub data_for_path {
   return undef;
 }
 
-use Data::Dumper;
-# print Dumper(data_for_path('../'));
+# use Data::Dumper;
+# print Dumper(data_for_path('../7/'));
 
-# 再帰的に定義されたデータを表示する
-# dump_data_for_path('../', data_for_path('../'));
+# my $dir = data_for_path('../');
+# say for (keys $dir->{7}{bin});
+# say $$dir{7};
 
-my $dir = data_for_path('../7');
-
-say  for (keys $dir->{7});
 # print Dumper $dir;
 
-# sub dump_data_for_path {
-#   my $path = shift;
-#   my $data = shift;
-#
-#   if (not defined $data) { # ファイルの場合
-#     print "$path\n";
-#     return;
-#   }
-#
-#   foreach (sort keys %$data) {
-#     # my %directory;
-#     # print $directory{$_};
-#     dump_data_for_path("$path/$_", "$path/$_");
-#   }
-# }
+sub dump_data_for_path {
+  my $path = shift;
+  my $data = shift;
+
+  if (not defined $data) { # ファイルの場合
+    print "$path\n";
+    return;
+  }
+
+  my %directory;
+  foreach (sort keys %$data) { #一個ずつファイルかディレクトリを評価する
+    # dump_data_for_path("$path/$_", $directory{$_});
+    # print "$_\n";
+    print $directory{$_};
+  }
+
+}
+
+# 再帰的に定義されたデータを表示する
+dump_data_for_path('../7/bin', data_for_path('../7/bin'));
