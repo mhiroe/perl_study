@@ -23,7 +23,10 @@ use Sheep;
 # my $beast = 'Cow';
 # $beast->speak;
 
-my @pasture = qw(Cow Cow Horse Sheep Sheep);
-foreach my $beast (@pasture) {
-  $beast->speak;
-}
+# my @pasture = qw(Cow Cow Horse Sheep Sheep);
+# foreach my $beast (@pasture) {
+#   $beast->speak;
+# }
+
+use Mouse;
+Mouse->speak;
