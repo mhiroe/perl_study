@@ -13,6 +13,8 @@ sub speak { # lib/Horse.pmのコード
   print "a $class goes neigh!\n";
 }
 
+sub sound { 'neigh!' }
+
 =head1 NAME
 
 Horse - The great new Horse!
