@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use feature 'say';
 
 # my $command = 'ls -la';
 # open my $pipe, '-|', $command # 外部コマンドからの入力
