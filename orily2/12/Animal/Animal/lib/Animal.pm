@@ -4,15 +4,55 @@ use 5.006;
 use strict;
 use warnings;
 
-# speekを共通化する
-sub speak {
-  my $class = shift;
-  print "a $class says ", $class->sound, "!\n";
+# # speekを共通化する
+# sub speak {
+#   my $class = shift;
+#   print "a $class says ", $class->sound, "!\n";
+# }
+#
+# sub sound {
+#   die 'You have to define sound() in a subclass'
+# }
+
+# sub name {
+#   my $self = shift; # $self=クラス名
+#   $$self;
+# }
+
+# クラスとインスタンスの両方に対応させる
+sub name {
+  my $either = shift;
+  ref $either ? $$either # インスタンスなので名前を返す
+  : "an unnamed $either"; # クラスなので汎用の値を返す
 }
 
-sub sound {
-  die 'You have to define sound() in a subclass'
+# sub named {
+#   my $class = shift;
+#   my $name = shift;
+#   bless \$name, $class;
+# }
+sub named {
+  my $class = shift;
+  my $name = shift;
+  my $self = { Name => $name, Color => $class->default_color };
+  bless $self, $class;
 }
+
+
+sub speak {
+  my $either = shift;
+  # ref $either ? $$either # インスタンスなので名前を返す
+  # : "an unnamed $either"; # クラスなので汎用の値を返す
+  print $either->name, ' goes ', $either->sound, "\n";
+}
+
+sub eat {
+  my $either = shift;
+  my $food = shift;
+  print $either->name, " eats $food.\n";
+}
+
+sub default_color { 'brown' }
 
 
 =head1 NAME

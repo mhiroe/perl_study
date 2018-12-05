@@ -8,12 +8,26 @@ use warnings;
 #     print "a Horse goes neigh!\n";
 # }
 
-sub speak { # lib/Horse.pmのコード
-  my $class = shift;
-  print "a $class goes neigh!\n";
-}
+# sub speak { # lib/Horse.pmのコード
+#   my $class = shift;
+#   print "a $class goes neigh!\n";
+# }
+# ->  to animal
 
-sub sound { 'neigh!' }
+use parent qw(Animal);
+sub sound { 'neigh' }
+
+# sub name {
+#   my $self = shift;
+#   $$self;
+# }
+# # コンストラクタをクラス側に持ってくる
+# sub named {
+#   my $class = shift;
+#   my $name = shift; bless \$name, $class;
+# }
+# -> Animal classに持っていく
+
 
 =head1 NAME
 

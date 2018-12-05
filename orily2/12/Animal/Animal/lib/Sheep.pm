@@ -4,15 +4,18 @@ use 5.006;
 use strict;
 use warnings;
 
+use parent qw(Animal);
+
 # sub speak {
 #     print "a Sheep goes baaaah!\n";
 # }
 
-sub speak { # lib/Sheep.pmのコード
-  my $class = shift;
-  print "a $class goes baaaah!\n";
-}
+# sub speak { # lib/Sheep.pmのコード
+#   my $class = shift;
+#   print "a $class goes baaaah!\n";
+# }
 
+sub default_color { 'white' }
 
 
 =head1 NAME
