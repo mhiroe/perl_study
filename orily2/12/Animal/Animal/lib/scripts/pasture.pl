@@ -28,5 +28,5 @@ use Sheep;
 #   $beast->speak;
 # }
 
-use Mouse;
-Mouse->speak;
+# use Mouse;
+# Mouse->speak;

@@ -22,7 +22,8 @@ use warnings;
 # クラスとインスタンスの両方に対応させる
 sub name {
   my $either = shift;
-  ref $either ? $$either # インスタンスなので名前を返す
+  # ref $either ? $$either # インスタンスなので名前を返す
+  ref $either ? $either->{Name} # ハッシュリファレンスから取得
   : "an unnamed $either"; # クラスなので汎用の値を返す
 }
 
@@ -38,7 +39,6 @@ sub named {
   bless $self, $class;
 }
 
-
 sub speak {
   my $either = shift;
   # ref $either ? $$either # インスタンスなので名前を返す
@@ -53,6 +53,38 @@ sub eat {
 }
 
 sub default_color { 'brown' }
+
+# 自分の色を確かめる
+sub color {
+  my $self = shift;
+  $self->{Color};
+}
+
+# # セッター
+# sub set_color {
+#   my $self = shift;
+#   if (defined wantarray) {
+#     # $self->{Color} = shift; # 引数を渡されたものをハッシュ化
+#     my $old = $self->{Color}; # 元の色をoldに入れる
+#     print $old,"   old \n";
+#     $self->{Color} = shift; # 新しい色を入れる
+#     print $self->{Color}, "  new \n";
+#     return $old;
+#   }
+#   else {
+#     $self->{Color} = shift;
+#     print "previous color\n";
+#   }
+# }
+
+# １つのオブジェクトにまとめる
+sub set_color {
+  my $self = shift;
+  $self->{Color} = shift;
+  print $self->{Color}, "  now \n";
+  return $self; # オブジェクト自体を返す
+}
+
 
 
 =head1 NAME
