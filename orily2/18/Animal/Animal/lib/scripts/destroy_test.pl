@@ -60,12 +60,12 @@ use Cow;
 # $barn = undef;
 # print "End of program.\n";
 
-# ## 小屋の外でも生きていけるうしさん
-# my $barn = Barn->new;
-# my @cows = (Cow->named('Bessie'), Cow->named('Gwen')); # Barnパッケージの外でうしを作る
-# $barn->add($_) for @cows;
-# print "Burn the barn:\n";
-# $barn = undef; #小屋はなくなるけど、うしは死なない(ホームレスになる)
-# print "Lose the cows:\n";
-# @cows = ( ); # うしを殺す
-# print "End of program.\n";
+## 小屋の外でも生きていけるうしさん
+my $barn = Barn->new;
+my @cows = (Cow->named('Bessie'), Cow->named('Gwen')); # Barnパッケージの外でうしを作る
+$barn->add($_) for @cows;
+print "Burn the barn:\n";
+$barn = undef; #小屋はなくなるけど、うしは死なない(ホームレスになる)
+print "Lose the cows:\n";
+@cows = ( ); # うしを殺す
+print "End of program.\n";
