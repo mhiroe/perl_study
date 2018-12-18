@@ -32,12 +32,44 @@ sub name {
 #   my $name = shift;
 #   bless \$name, $class;
 # }
+# sub named {
+#   my $class = shift;
+#   my $name = shift;
+#   my $self = { Name => $name, Color => $class->default_color };
+#   bless $self, $class;
+# }
+
+# コンストラクタ内にディレクトリハンドル (一時ファイル)を作る
+
+# use File::Temp qw(tempfile);
+# sub named {
+#   my $class = shift;
+#   my $name = shift;
+#   my $self = { Name => $name, Color => $class->default_color };
+#   ## 新しいコード。ここから...
+#   my ($fh, $filename) = tempfile();
+#   $self->{temp_fh} = $fh;
+#   $self->{temp_filename} = $filename;
+#   ## ...ここまで
+#   bless $self, $class;
+# }
+
+
+# 作った動物を REGISTRY で管理する
+my %REGISTRY;
 sub named {
   my $class = shift;
   my $name = shift;
   my $self = { Name => $name, Color => $class->default_color };
   bless $self, $class;
+  # ↓ キーとして使った $selfは文字列になってくれる
+  $REGISTRY{$self} = $self; # これも$selfを返す
 }
+# 外部から REGISTRYを呼び出すために必要
+sub registered {
+  return map { 'a '.ref($_)." named ".$_->name } values %REGISTRY;
+}
+
 
 sub speak {
   my $either = shift;
@@ -60,11 +92,21 @@ sub color {
   $self->{Color};
 }
 
-# デコンストラクタ
+# # デコンストラクタ
+# sub DESTROY {
+#   my $self = shift;
+# print '[', $self->name, " has died.]\n";
+# }
+
+# デコンストラクタ内で ディレクトリハンドルを閉じる
 sub DESTROY {
   my $self = shift;
-print '[', $self->name, " has died.]\n";
+  my $fh = $self->{temp_fh};
+  close $fh;
+  unlink $self->{temp_filename}; # 閉じる
+  print '[', $self->name, " has died.]\n";
 }
+
 
 
 
